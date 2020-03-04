@@ -1,0 +1,361 @@
+<html>
+
+<head>
+    <title>SNAKE</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+
+<body>
+    <div id="board" class="board">
+    </div>
+
+    <div id="timer">
+        <p id="p3">3</p>
+    </div>
+    <div id="puntaje">
+        <p id="p5">PUNTOS</p>
+    </div>
+    <div id="contador">
+        <p id="p4">3</p>
+    </div>
+    <div id="comenzar" onclick="madre();">
+        <p id="p1">COMENZAR</p>
+    </div>
+    <input id="largo" class="plh" placeholder="largo" type="number">
+    <input id="ancho" class="plh" placeholder="ancho" type="number">
+    <div id="PERDISTE">
+        <p id="p2">PERDISTE</p>
+    </div>
+    <div id="restart" onclick="funcrestart();">
+        <p id="p6">REINICIAR</p>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    "use strict";
+    document.getElementById("largo").value = "20";
+    document.getElementById("ancho").value = "20";
+    var bloqueo = 0;
+    var limitey;
+    var limitex;
+    var rows = [];
+    var timerS = 3;
+    var enter = 0;
+    var timer;
+    var row1 = [];
+    var pausa = 0;
+    var timing = 100;
+    var Cfruit = "rgb(255,0,0)";
+    var CHead = "rgb(0,128,0)";
+    var CBack = "rgb(185, 185, 185)";
+    var CBody = "rgb(60,179,113)";
+    var GAME;
+    var long = 3;
+    var x = 0;
+    var y = 1;
+    var x2 = 0;
+    var y2 = 0;
+    var teclas = 0;
+    var hx = 0;
+    var hy = 2;
+    var mySound;
+    var snake = [];
+    var r1;
+    var r2;
+
+    function find(a) {
+        for (var f5 = 0; f5 < limitey; f5++) {
+            if (rows[f5].indexOf(a) != -1) {
+                return [f5, rows[f5].indexOf(a)];
+            }
+        }
+    }
+
+    function update() {
+        for (var p = long - 2; p > -1; p--) {
+            snake[p + 1] = snake[p];
+            snake[p + 1].style.backgroundColor = CBody;
+        }
+    }
+
+    function fruit() {
+        ;
+        var flag = 0;
+        while (flag == 0) {
+            r1 = Math.floor(Math.random() * (limitey));
+            r2 = Math.floor(Math.random() * (limitey));
+            flag = 1;
+            for (var f6 = 0; f6 < long; f6++) {
+                if (find(snake[f6])[0] == r1 && find(snake[f6])[1] == r2) {
+                    flag = 0;
+                    break;
+                }
+            }
+        }
+        rows[r1][r2].style.backgroundColor = Cfruit;
+    }
+
+    function boardcreator() {
+        for (var f7 = 0; f7 < limitey; f7++) {
+            rows.push(row1);
+            for (var f8 = 0; f8 < limitex; f8++) {
+                var l00 = ("00" + f7).slice(-2);
+                var c00 = ("00" + f8).slice(-2);
+                document.getElementById("board").insertAdjacentHTML("beforeend",
+                    "<div id=" + '"' + "cell-" + l00 + c00 + '"' + "></div>");
+                document.getElementById("cell-" + l00 + c00).style.position = "absolute";
+                document.getElementById("cell-" + l00 + c00).style.backgroundColor = CBack;
+                document.getElementById("cell-" + l00 + c00).style.height = ((100 - 0.5 * (limitey + 1) - 0.2) /
+                    limitey) + "%";
+                document.getElementById("cell-" + l00 + c00).style.width = ((100 - 0.5 * (limitex + 1) - 0.2) /
+                    limitex) + "%";
+                document.getElementById("cell-" + l00 + c00).style.left =
+                    ((((100 - 0.5 * (limitex + 1) - 0.2) / limitex) * f8) + (0.5 * (f8 + 1)) + 0.1) + "%";
+                document.getElementById("cell-" + l00 + c00).style.top =
+                    ((((100 - 0.5 * (limitey + 1) - 0.2) / limitey) * f7) + (0.5 * (f7 + 1)) + 0.1) + "%";;
+                rows[f7].push(document.getElementById("cell-" + l00 + c00));
+            }
+            row1 = [];
+        }
+    }
+
+    function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function () {
+            this.sound.play();
+        }
+        this.stop = function () {
+            this.sound.pause();
+        }
+    }
+
+    function lose() {
+        for (var f9 = 1; f9 < long; f9++) {
+            if (find(snake[f9])[0] == hy &&
+                find(snake[f9])[1] == hx) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function move() {
+        if (pausa % 2 == 0) {
+            if (hy < 0 || hy > limitey - 1 || hx < 0 || hx > limitex - 1 || lose() == true) {
+                mySound.stop();
+                clearInterval(GAME);
+                GAME = 0;
+                bloqueo = 0;
+                PERDISTE.style.display = "block";
+                restart.style.display = "block";
+                enter = 2;
+            } else {
+                snake[long - 1].style.backgroundColor = CBack;
+                //alert(rows[hy][hx].id);alert(snake[0].id);
+                hy = hy + y;
+                hx = hx + x;
+                update();
+                if (hy > -1 && hy < limitey && hx > -1 && hx < limitex) {
+                    snake[0] = rows[hy][hx];
+                    rows[hy][hx].style.backgroundColor = CHead;
+                }
+                if (hy == r1 && hx == r2) {
+                    var ty = find(snake[long - 1])[0] - find(snake[long - 2])[0];
+                    var tx = find(snake[long - 1])[1] - find(snake[long - 2])[1];
+                    if ((find(snake[long - 1])[0] + ty) >= limitey) {
+                        ty -= ((find(snake[long - 1])[0] + ty) - limitey + 1);
+                        tx++;
+                        if ((find(snake[long - 1])[1] + tx) >= limitex || lose() == true) {
+                            tx -= 2;
+                        }
+                    }
+
+                    if ((find(snake[long - 1])[0] + ty) <= -1) {
+                        ty += ((find(snake[long - 1])[0] + ty) + 2);
+                        tx++;
+                        if ((find(snake[long - 1])[1] + tx) >= limitex || lose() == true) {
+                            tx -= 2;
+                        }
+                    }
+
+                    if ((find(snake[long - 1])[1] + tx) >= limitex) {
+                        ty--;
+                        tx -= ((find(snake[long - 1])[1] + tx) - limitex + 1);
+                        if ((find(snake[long - 1])[0] + ty) <= -1 || lose() == true) {
+                            ty += 2;
+                        }
+                    }
+
+                    if ((find(snake[long - 1])[1] + tx) <= -1) {
+                        ty++;
+                        tx += ((find(snake[long - 1])[1] + tx) + 2);
+                        if ((find(snake[long - 1])[0] + ty) >= limitey || lose() == true) {
+                            ty -= 2;
+                        }
+                    }
+
+                    snake.push(rows[find(snake[long - 1])[0] + ty][find(snake[long - 1])[1] + tx]);
+                    long++;
+                    document.getElementById("p4").innerHTML = long;
+                    snake[long - 1].style.backgroundColor = CBody;
+                    fruit();
+                }
+
+            }
+        }
+    }
+
+    function funcrestart() {
+        document.getElementById("p3").innerHTML = 3;
+        document.getElementById("timer").style.display = "block";
+        mySound = new sound("img/music.mp3");
+        board.innerHTML = "";
+        PERDISTE.style.display = "none";
+        restart.style.display = "none";
+        document.getElementById("largo").value = "20";
+        document.getElementById("ancho").value = "20";
+        bloqueo = 0;
+        rows = [];
+        timerS = 3;
+        row1 = [];
+        pausa = 0;
+        GAME = 0;
+        long = 3;
+        document.getElementById("p4").innerHTML = long;
+        x = 0;
+        y = 1;
+        hx = 0;
+        hy = 2;
+        snake = [];
+        madre();
+    }
+
+    function madre() {
+        if (document.getElementById("largo").value == null ||
+            document.getElementById("ancho").value == null ||
+            document.getElementById("largo").value < 8 ||
+            document.getElementById("ancho").value < 8 ||
+            document.getElementById("largo").value > 40 ||
+            document.getElementById("ancho").value > 40) {
+            alert("Inserte solo números mayores a 7 y menores a 40");
+        } else {
+            limitey = parseInt(document.getElementById("largo").value);
+            limitex = parseInt(document.getElementById("ancho").value);
+            //timing = 40000/(limitey*limitex);
+            boardcreator();
+            snake = [rows[hy][hx], rows[hy - 1][hx], rows[hy - 2][hx]];
+            fruit();
+            enter = 1;
+            document.getElementById("contador").style.display = "block";
+            document.getElementById("puntaje").style.display = "block";
+            largo.style.display = "none";
+            ancho.style.display = "none";
+            comenzar.style.display = "none";
+            rows[hy][hx].style.backgroundColor = CHead;
+            rows[hy - 1][hx].style.backgroundColor = CBody;
+            rows[hy - 2][hx].style.backgroundColor = CBody;
+            console.log(timerS);
+            timer = setInterval(function () {
+                if (timerS > 0) {
+                    timerS--;
+                }
+                document.getElementById("timer").style.display = "block";
+                if (timerS == "GO!") {
+                    timerS = null;
+                    document.getElementById("timer").style.display = "none";
+                    clearInterval(timer);
+                    timer = 0;
+                    bloqueo = 1;
+                    GAME = setInterval(function () {
+                        move();
+                    }, timing);
+                    mySound = new sound("img/music.mp3");
+                    mySound.play();
+                }
+                if (timerS == 0) {
+                    timerS = "GO!"
+                }
+                console.log(timerS);
+                document.getElementById("p3").innerHTML = timerS;
+            }, 1000);
+        }
+    }
+    document.addEventListener("keydown", function (event) {
+        if (event.which == 13 && enter == 0) {
+            madre();
+        }
+        if (event.which == 13 && enter == 2) {
+            funcrestart();
+        }
+        if (bloqueo == 1) {
+            if (event.which == 32) { //flecha aba
+                pausa++;
+            }
+            if (event.which == 37 && x == 0 && pausa % 2 == 0) { //flecha izq
+                if (teclas == 1) {
+                    y = 0;
+                    x = -1;
+                    teclas = 0;
+                } else {
+                    y2 = 0;
+                    x2 = -1;
+                }
+            }
+            if ((event.which == 38 || event.which == 87) && y == 0 && pausa % 2 == 0) { //flecha arr
+                if (teclas == 1) {
+                    y = -1;
+                    x = 0;
+                    teclas = 0;
+                } else {
+                    y2 = -1;
+                    x2 = 0;
+                }
+
+            }
+            if ((event.which == 39) && x == 0 && pausa % 2 == 0) { //flecha der
+                if (teclas == 1) {
+                    y = 0;
+                    x = 1;
+                    teclas = 0;
+                } else {
+                    y2 = 0;
+                    x2 = 1;
+                }
+
+            }
+            if ((event.which == 40 || event.which == 83) && y == 0 && pausa % 2 == 0) { //flecha aba
+                if (teclas == 1) {
+                    y = 1;
+                    x = 0;
+                    teclas = 0;
+                } else {
+                    y2 = 1;
+                    x2 = 0;
+                }
+
+            }
+            if (teclas == 0) {
+                var caca = setTimeout(function () {
+                    if (x2 != 0 || y2 != 0) {
+                        x = x2;
+                        y = y2;
+                    }
+                    teclas = 1;
+                    x2 = 0;
+                    y2 = 0;
+                }, timing);
+            }
+        }
+
+
+    })
+</script>
+
+</html>

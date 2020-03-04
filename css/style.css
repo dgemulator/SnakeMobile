@@ -1,0 +1,138 @@
+*{margin:0; padding:0;background-color: black;}
+#comenzar{
+    cursor: pointer;
+    left: 50%;
+    margin-left: -31vw;
+    top: 50%;
+    margin-top: -16vw;
+    background-color: 	rgb(114, 106, 223);
+    position: absolute;
+    width: 60vw;
+    height: 30vw;
+    border: 1vw solid rgb(176, 255, 251);
+
+}
+
+#p1{
+    background-color: 	rgb(114, 106, 223);
+    font-size: 10vw;
+    color: white;
+    text-align: center;
+    margin-top: 9vw;
+}
+#PERDISTE{
+    left: 50%;
+    margin-left: -31vw;
+    top: 50%;
+    margin-top: -16vw;
+    background-color: 	rgb(63, 214, 57);
+    position: absolute;
+    width: 60vw;
+    height: 30vw;
+    border: 1vw solid rgb(47, 223, 114);
+    display: none;
+}
+
+#p2{
+    background-color: 	rgb(114, 106, 223);
+    font-size: 10vw;
+    color: white;
+    text-align: center;
+    margin-top: 9vw;
+}
+#board{
+    top: 50%;
+    margin-top: -45vw;
+    left: 50%;
+    margin-left: -45vw;
+    background-color: 	rgb(22, 22, 22);
+    position: absolute;
+    width: 90vw;
+    height: 90vw;
+    border: 0.1vw solid white;
+
+}                
+.plh{
+    width: 10vw;
+    left:50%;
+    margin-left: -5vw;
+    background-color: white;
+    position: absolute;
+}
+#ancho{
+top: 120vw;
+}
+#largo{
+    top: 110vw;
+    }
+#timer{
+        top: 50%;
+        margin-top: -5vw;
+        left: 50%;
+        margin-left: -10vw;
+        background-color: transparent;
+        position: absolute;
+        width: 30vw;
+        height: 10vw;} 
+#p3{
+    width: 20vw;
+    font-size: 10vw;
+    text-align: center;
+    background-color: black;
+    color: white;
+}    
+#contador{
+    margin-top: 19vw;
+    left: 50%;
+    margin-left: -10vw;
+    background-color: transparent;
+    position: absolute;
+    width: 30vw;
+    height: 10vw;
+    display: none;} 
+#p4{
+border: 0.1vw solid yellow;    
+width: 20vw;
+font-size: 10vw;
+text-align: center;
+background-color: black;
+color: white;
+}  
+#puntaje{
+    left: 50%;
+    margin-top: 8vw;
+    margin-left: -10vw;
+    background-color: transparent;
+    position: absolute;
+    width: 20vw;
+    height: 10vw;
+    display: none;
+}
+
+#p5{
+    font-size: 5vw;
+    text-align: center;
+    background-color: yellow;
+    color: black;
+    }       
+    #restart{
+        cursor: pointer;
+        left: 50%;
+        margin-left: -15vw;
+        top: 100%;
+        margin-top: -35vw;
+        background-color: 	red;
+        position: absolute;
+        width: 30vw;
+        height: 6vw;
+        border: 1vw solid green;
+        display: none;
+    }
+    
+    #p6{
+        background-color: red;
+        font-size: 5vw;
+        color: white;
+        text-align: center;
+        margin-top: 0.5vw;
+    }
